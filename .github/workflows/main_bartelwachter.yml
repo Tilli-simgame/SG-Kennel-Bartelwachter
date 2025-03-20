@@ -28,7 +28,7 @@ jobs:
           npm install --legacy-peer-deps
 
       - name: Zip artifact for deployment
-        run: zip --symlinks -r release.zip ./*
+        run: zip --symlinks -r release.zip ./* .next
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
