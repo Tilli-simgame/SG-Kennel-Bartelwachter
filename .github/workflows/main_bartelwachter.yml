@@ -69,4 +69,3 @@ jobs:
           app-name: 'bartelwachter'
           slot-name: 'Production'
           package: .
-          
