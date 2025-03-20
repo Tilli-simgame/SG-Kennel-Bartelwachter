@@ -8,8 +8,8 @@ import { Toaster } from "@/components/ui/toaster"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Bartelwächter Kennel",
-  description: "A modern kennel management system",
+  title: "Kennel Bartelwächter",
+  description: "Virtuaalikenneli",
     generator: 'v0.dev'
 }
 

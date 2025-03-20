@@ -1,0 +1,12 @@
+{
+  "contact": {
+    "id": "4",
+    "name": "Emily Davis",
+    "email": "emily.d@example.com",
+    "phone": "(555) 234-5678",
+    "address": "321 Elm St, Nowhere, USA",
+    "category": "Client",
+    "notes": "Owner of Max (German Shepherd)"
+  }
+}
+

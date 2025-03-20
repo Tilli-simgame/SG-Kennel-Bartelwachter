@@ -1,0 +1,12 @@
+{
+  "contact": {
+    "id": "1",
+    "name": "John Smith",
+    "email": "john.smith@example.com",
+    "phone": "(555) 123-4567",
+    "address": "123 Main St, Anytown, USA",
+    "category": "Staff",
+    "notes": "Head trainer, specializes in obedience training"
+  }
+}
+

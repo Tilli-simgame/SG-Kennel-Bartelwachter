@@ -1,0 +1,30 @@
+{
+  "profile": {
+    "name": "King Max",
+    "breed": "Labradorinnoutaja",
+    "dateOfBirth": "2019-08-22",
+    "registration": "KC456789123",
+    "color": "Keltainen",
+    "weight": 32,
+    "height": 58,
+    "healthTests": ["Lonkkaindeksi: 5/5", "Kyynärindeksi: 0/0", "Silmätarkastus: Puhdas"],
+    "vaccinationsUpToDate": true,
+    "showResults": [
+      {
+        "show": "Kansainvälinen koiranäyttely 2022",
+        "achievement": "Best in Show"
+      },
+      {
+        "show": "Kansallinen noutajamestaruus 2021",
+        "achievement": "1. sija"
+      }
+    ],
+    "dnaTests": ["PRA Puhdas", "EIC Puhdas", "CNM Puhdas"],
+    "breeding": {
+      "available": true,
+      "previousLitters": 5
+    },
+    "description": "Kuningas Max on mestarillinen labradorinnoutaja, jolla on erinomainen sukupuu. Hän on tuottanut useita mestarillisia pentuja ja hänellä on lempeä, ystävällinen luonne."
+  }
+}
+

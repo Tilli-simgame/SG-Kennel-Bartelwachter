@@ -15,6 +15,9 @@ import {
   HelpCircle,
 } from "lucide-react"
 
+// Add the useMobile hook import
+import { useMobile } from "@/hooks/use-mobile"
+
 interface Photo {
   id: string
   title: string
@@ -141,6 +144,9 @@ const samplePhotos: Record<string, Photo[]> = {
 }
 
 export function PhotoGalleryContent({ path }: PhotoGalleryContentProps) {
+  // Add the isMobile constant
+  const isMobile = useMobile()
+
   // Extract the folder and category from the path
   const pathParts = path.split(".")
   const category = pathParts[pathParts.length - 1]
@@ -275,7 +281,8 @@ export function PhotoGalleryContent({ path }: PhotoGalleryContentProps) {
   )
 
   return (
-    <div className="flex flex-col h-full bg-[#ECE9D8]">
+    // Update the main container div to add padding on mobile
+    <div className={`flex flex-col h-full bg-[#ECE9D8] ${isMobile ? "pb-4" : ""}`}>
       {/* Main image area */}
       <div className="flex-grow bg-[#000000] flex items-center justify-center overflow-hidden">
         <img

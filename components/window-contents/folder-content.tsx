@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Share2 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { copyShareableUrl } from "@/lib/share-utils"
+import { useMobile } from "@/hooks/use-mobile"
 
 interface FolderContentProps {
   path: string
@@ -16,8 +17,9 @@ export function FolderContent({ path, onOpenFile }: FolderContentProps) {
   const [currentPath, setCurrentPath] = useState(path)
   const [currentItem, setCurrentItem] = useState<any>(null)
   const { toast } = useToast()
-  const clickTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const clickTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const processingClickRef = useRef<boolean>(false)
+  const isMobile = useMobile()
 
   useEffect(() => {
     // Get the item from the path
@@ -121,7 +123,7 @@ export function FolderContent({ path, onOpenFile }: FolderContentProps) {
   }
 
   return (
-    <div className="p-4">
+    <div className={`p-4 ${isMobile ? "pb-4" : ""}`}>
       {/* Path navigation */}
       <div className="bg-gray-100 p-2 mb-4 border border-gray-300 text-xs flex items-center">
         <span className="mr-2 text-gray-600">Address:</span>

@@ -1,0 +1,12 @@
+{
+  "contact": {
+    "id": "6",
+    "name": "Jennifer Taylor",
+    "email": "jtaylor@example.com",
+    "phone": "(555) 345-6789",
+    "address": "987 Cedar Ln, Someplace, USA",
+    "category": "Supplier",
+    "notes": "Premium dog food supplier"
+  }
+}
+

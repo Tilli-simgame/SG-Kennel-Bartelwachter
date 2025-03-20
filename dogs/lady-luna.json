@@ -1,0 +1,30 @@
+{
+  "profile": {
+    "name": "Lady Luna",
+    "breed": "Bordercollie",
+    "dateOfBirth": "2021-03-10",
+    "registration": "KC987654321",
+    "color": "Musta ja valkoinen",
+    "weight": 20,
+    "height": 53,
+    "healthTests": ["Lonkkaindeksi: 4/5", "Silmätarkastus: Puhdas"],
+    "vaccinationsUpToDate": true,
+    "showResults": [
+      {
+        "show": "Maakuntanäyttely 2023",
+        "achievement": "Rotunsa paras"
+      },
+      {
+        "show": "Agilitymestaruus 2022",
+        "achievement": "1. sija"
+      }
+    ],
+    "dnaTests": ["CEA Puhdas", "TNS Puhdas"],
+    "breeding": {
+      "available": false,
+      "previousLitters": 0
+    },
+    "description": "Lady Luna on kaunis bordercollie, jolla on poikkeukselliset agilitytaidot. Hänellä on ystävällinen luonne ja hän tulee hyvin toimeen lasten kanssa."
+  }
+}
+

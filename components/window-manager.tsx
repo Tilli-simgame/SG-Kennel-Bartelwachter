@@ -9,6 +9,11 @@ import { PhotoGalleryContent } from "./window-contents/photo-gallery-content"
 import { kennelStructure } from "@/data/kennel-structure"
 import { AddressBookContent } from "./window-contents/address-book-content"
 import { MessengerContent } from "./window-contents/messenger-content"
+import { ContactListContent } from "./window-contents/contact-list-content"
+import { EmailContent } from "./window-contents/email-content"
+import { BrowserContent } from "./window-contents/browser-content"
+import { InfoPageContent } from "./window-contents/info-page-content"
+import { PresentationContent } from "./window-contents/presentation-content"
 
 interface WindowManagerProps {
   windows: any[]
@@ -18,6 +23,7 @@ interface WindowManagerProps {
   onMaximize: (id: string) => void
   onFocus: (id: string) => void
   onCreateWindow: (path: string, forceCreate?: boolean, updateUrl?: boolean) => void
+  onCreateChatWindow: (contactId: string, contactName: string) => void
 }
 
 export function WindowManager({
@@ -28,6 +34,7 @@ export function WindowManager({
   onMaximize,
   onFocus,
   onCreateWindow,
+  onCreateChatWindow,
 }: WindowManagerProps) {
   const [positions, setPositions] = useState<Record<string, { x: number; y: number }>>({})
 
@@ -118,7 +125,45 @@ export function WindowManager({
 
     // Check if this is the messenger (communityHub)
     if (window.path === "communityHub") {
-      return <MessengerContent path={window.path} />
+      return <ContactListContent path={window.path} onStartChat={onCreateChatWindow} />
+    }
+
+    // Check if this is the email app
+    if (window.path === "emailApp") {
+      return <EmailContent path={window.path} />
+    }
+
+    // Check if this is the browser app
+    if (window.path === "browserApp") {
+      return <BrowserContent path={window.path} />
+    }
+
+    // Check if this is a presentation file
+    const isPresentationFile =
+      pathParts.some((part) => part === "training" || part === "grooming") && window.type === "file"
+
+    if (isPresentationFile) {
+      return <PresentationContent path={window.path} />
+    }
+
+    // Check if this is a service-related file (training, grooming, boarding, breeding)
+    const isServiceFile =
+      pathParts.some(
+        (part) =>
+          part === "services" ||
+          part === "training" ||
+          part === "grooming" ||
+          part === "boarding" ||
+          part === "breeding",
+      ) && window.type === "file"
+
+    if (isServiceFile) {
+      return <InfoPageContent path={window.path} />
+    }
+
+    // Check if this is a chat window
+    if (window.type === "chat") {
+      return <MessengerContent path={window.path} contactId={window.contactId} contactName={window.contactName} />
     }
 
     if (isContactInfo) {
@@ -134,9 +179,6 @@ export function WindowManager({
     const isPhotoGallery =
       pathParts.some((part) => part === "kennelPhotos" || part === "dogPhotos") && window.type === "file"
 
-    // Check if this is a community hub path (for any remaining references)
-    const isCommunityHub = pathParts.some((part) => part === "guestBook") && window.type === "file"
-
     if (window.type === "file") {
       if (isDogProfile) {
         return <ProfileContent path={window.path} />
@@ -144,10 +186,6 @@ export function WindowManager({
 
       if (isPhotoGallery) {
         return <PhotoGalleryContent path={window.path} />
-      }
-
-      if (isCommunityHub) {
-        return <MessengerContent path={window.path} />
       }
 
       return <NotepadContent title={window.title} />
@@ -182,6 +220,7 @@ export function WindowManager({
           onMaximize={() => onMaximize(window.id)}
           onFocus={() => onFocus(window.id)}
           onPositionChange={(position) => updatePosition(window.id, position)}
+          isChatWindow={window.type === "chat"}
         >
           {getContentComponent(window)}
         </Window>

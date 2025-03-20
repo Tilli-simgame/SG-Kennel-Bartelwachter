@@ -7,6 +7,8 @@ import { DesktopShortcut } from "./desktop-shortcut"
 import { kennelStructure } from "@/data/kennel-structure"
 import { StickyNote } from "./sticky-note"
 import { internalPathToUrlPath, urlPathToInternalPath } from "@/lib/path-utils"
+import { translations } from "@/lib/translations"
+import { useMobile } from "@/hooks/use-mobile"
 
 interface KennelDesktopProps {
   initialPath?: string | null
@@ -17,6 +19,7 @@ export function KennelDesktop({ initialPath }: KennelDesktopProps) {
   const [activeWindowId, setActiveWindowId] = useState<string | null>(null)
   // Flag to prevent hash change handler from running when we programmatically update the hash
   const isUpdatingHashRef = useRef<boolean>(false)
+  const isMobile = useMobile()
 
   // Function to update URL hash without triggering a page reload
   const updateUrlHash = (path: string | null) => {
@@ -121,8 +124,11 @@ export function KennelDesktop({ initialPath }: KennelDesktopProps) {
       icon: item.icon,
       type: item.type,
       isMinimized: false,
-      isMaximized: false,
-      position: { x: 50 + windows.length * 30, y: 50 + windows.length * 30 },
+      isMaximized: isMobile, // Set to true on mobile
+      position: {
+        x: isMobile ? 0 : 50 + windows.length * 30,
+        y: isMobile ? 0 : 50 + windows.length * 30,
+      },
     }
 
     console.log("Creating new window:", newWindow)
@@ -133,6 +139,29 @@ export function KennelDesktop({ initialPath }: KennelDesktopProps) {
     if (updateUrl) {
       updateUrlHash(path)
     }
+  }
+
+  // Create a chat window
+  const createChatWindow = (contactId: string, contactName: string) => {
+    const windowId = `chat-${Date.now()}`
+    const newWindow = {
+      id: windowId,
+      path: `chat-${contactId}`,
+      title: contactName,
+      icon: "💬",
+      type: "chat",
+      contactId,
+      contactName,
+      isMinimized: false,
+      isMaximized: false, // Never maximize chat windows, even on mobile
+      position: {
+        x: Math.max(100, Math.random() * (window.innerWidth - 400)),
+        y: Math.max(100, Math.random() * (window.innerHeight - 500)),
+      },
+    }
+
+    setWindows((prev) => [...prev, newWindow])
+    setActiveWindowId(windowId)
   }
 
   const closeWindow = (id: string) => {
@@ -146,7 +175,9 @@ export function KennelDesktop({ initialPath }: KennelDesktopProps) {
         // Focus the next window and update URL
         const nextWindow = remainingWindows[remainingWindows.length - 1]
         setActiveWindowId(nextWindow.id)
-        updateUrlHash(nextWindow.path)
+        if (!nextWindow.path.startsWith("chat-")) {
+          updateUrlHash(nextWindow.path)
+        }
       } else {
         // No windows left, clear the URL parameter
         setActiveWindowId(null)
@@ -164,7 +195,9 @@ export function KennelDesktop({ initialPath }: KennelDesktopProps) {
       if (visibleWindows.length > 0) {
         const nextWindow = visibleWindows[visibleWindows.length - 1]
         setActiveWindowId(nextWindow.id)
-        updateUrlHash(nextWindow.path)
+        if (!nextWindow.path.startsWith("chat-")) {
+          updateUrlHash(nextWindow.path)
+        }
       } else {
         // No visible windows left
         updateUrlHash(null)
@@ -181,7 +214,7 @@ export function KennelDesktop({ initialPath }: KennelDesktopProps) {
 
     // Update URL when focusing a window
     const focusedWindow = windows.find((w) => w.id === id)
-    if (focusedWindow) {
+    if (focusedWindow && !focusedWindow.path.startsWith("chat-")) {
       updateUrlHash(focusedWindow.path)
     }
   }
@@ -238,19 +271,33 @@ export function KennelDesktop({ initialPath }: KennelDesktopProps) {
   }, [])
 
   return (
-    <div className="relative h-screen w-full overflow-hidden bg-gradient-to-br from-blue-600 to-blue-800">
+    <div
+      className="relative h-screen w-full overflow-hidden"
+      style={{
+        backgroundImage:
+          'url("https://hebbkx1anhila5yf.public.blob.vercel-storage.com/field-bakcground-1ctVaRhEhCWwPvj5gUA353fDNxt4gE.jpeg")',
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
+      {/* Rest of the component remains the same */}
       <div id="desktop-area" className="absolute inset-0 pb-14">
         {/* Desktop shortcuts */}
         <div className="p-4 grid grid-cols-1 gap-4">
-          <DesktopShortcut title="Our Dogs" icon="🐕" onClick={() => createWindow("ourDogs", false)} />
-          <DesktopShortcut title="Messenger" icon="💬" onClick={() => createWindow("communityHub", false)} />
-          <DesktopShortcut title="Contact & Info" icon="⚙️" onClick={() => createWindow("contactInfo", false)} />
+          <DesktopShortcut title={translations.ourDogs} icon="📁" onClick={() => createWindow("ourDogs", false)} />
+          <DesktopShortcut title={translations.browser} icon="🌐" onClick={() => createWindow("browserApp", false)} />
+          <DesktopShortcut
+            title={translations.messenger}
+            icon="💬"
+            onClick={() => createWindow("communityHub", false)}
+          />
         </div>
 
         {/* Sticky note */}
         <StickyNote
-          title="Welcome visitor!"
-          content="Nice to have you here :)"
+          title={translations.welcomeVisitor}
+          content={translations.niceToHaveYou}
           position={{ x: 800, y: 100 }}
           color="yellow"
         />
@@ -264,6 +311,7 @@ export function KennelDesktop({ initialPath }: KennelDesktopProps) {
           onMaximize={maximizeWindow}
           onFocus={focusWindow}
           onCreateWindow={createWindow}
+          onCreateChatWindow={createChatWindow}
         />
       </div>
 
@@ -273,6 +321,7 @@ export function KennelDesktop({ initialPath }: KennelDesktopProps) {
         activeWindowId={activeWindowId}
         onWindowSelect={focusWindow}
         onCreateWindow={createWindow}
+        onClose={closeWindow}
       />
     </div>
   )

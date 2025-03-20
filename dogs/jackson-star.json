@@ -1,0 +1,30 @@
+{
+  "profile": {
+    "name": "Jackson Star",
+    "breed": "Siperianhusky",
+    "dateOfBirth": "2021-01-18",
+    "registration": "KC345678901",
+    "color": "Harmaa ja valkoinen",
+    "weight": 25,
+    "height": 59,
+    "healthTests": ["Silmätarkastus: Puhdas", "Lonkkaindeksi: 4/5"],
+    "vaccinationsUpToDate": true,
+    "showResults": [
+      {
+        "show": "Talvikoirafestivaali 2023",
+        "achievement": "Rotunsa paras"
+      },
+      {
+        "show": "Käyttökoiranäyttely 2022",
+        "achievement": "2. sija"
+      }
+    ],
+    "dnaTests": ["Degeneratiivinen myelopatia Puhdas"],
+    "breeding": {
+      "available": true,
+      "previousLitters": 0
+    },
+    "description": "Jackson Star on energinen ja näyttävä siperianhusky, jolla on kauniit merkit ja jäänsiniset silmät. Hänellä on erinomainen kestävyys ja ystävällinen, ulospäinsuuntautunut persoonallisuus."
+  }
+}
+

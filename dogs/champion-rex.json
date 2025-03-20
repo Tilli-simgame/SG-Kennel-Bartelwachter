@@ -1,0 +1,30 @@
+{
+  "profile": {
+    "name": "Champion Rex",
+    "breed": "Saksanpaimenkoira",
+    "dateOfBirth": "2020-05-15",
+    "registration": "KC123456789",
+    "color": "Musta ja ruskea",
+    "weight": 35,
+    "height": 65,
+    "healthTests": ["Lonkkaindeksi: 5/5", "Kyynärindeksi: 0/0"],
+    "vaccinationsUpToDate": true,
+    "showResults": [
+      {
+        "show": "Kansallinen mestaruus 2023",
+        "achievement": "Rotunsa paras"
+      },
+      {
+        "show": "Alueellinen näyttely 2022",
+        "achievement": "Ryhmänsä paras"
+      }
+    ],
+    "dnaTests": ["vWD Puhdas", "DM Puhdas"],
+    "breeding": {
+      "available": true,
+      "previousLitters": 2
+    },
+    "description": "Mestari Rex on erinomainen esimerkki saksanpaimenkoirarodusta, jolla on erinomainen luonne ja rakenne. Hän on osoittanut kykynsä näyttelykehässä ja jalostuskoirana."
+  }
+}
+

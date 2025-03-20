@@ -1,0 +1,12 @@
+{
+  "contact": {
+    "id": "5",
+    "name": "Robert Wilson",
+    "email": "rwilson@example.com",
+    "phone": "(555) 876-5432",
+    "address": "654 Maple Dr, Anywhere, USA",
+    "category": "Client",
+    "notes": "Owner of Bella (Border Collie)"
+  }
+}
+

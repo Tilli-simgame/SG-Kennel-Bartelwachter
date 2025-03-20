@@ -40,7 +40,7 @@ export const kennelStructure: Record<string, any> = {
   },
   ourDogs: {
     title: "Our Dogs",
-    icon: "🐕",
+    icon: "📁",
     type: "root",
     children: {
       // Dogs listed directly under Our Dogs
@@ -114,6 +114,11 @@ export const kennelStructure: Record<string, any> = {
       },
     },
   },
+  emailApp: {
+    title: "Email",
+    icon: "📧",
+    type: "file",
+  },
   communityHub: {
     title: "Messenger",
     icon: "💬",
@@ -121,7 +126,7 @@ export const kennelStructure: Record<string, any> = {
   },
   contactInfo: {
     title: "Contact & Info",
-    icon: "⚙️",
+    icon: "📇",
     type: "root",
     children: {
       contact: {
@@ -157,6 +162,7 @@ export const menuMap: Record<string, string> = {
   "my-computer": "ourKennel",
   "my-documents": "ourDogs",
   "my-pictures": "photoGallery",
+  "my-email": "emailApp",
   "my-music": "communityHub",
   "control-panel": "contactInfo",
 }

@@ -1,0 +1,30 @@
+{
+  "profile": {
+    "name": "Bella Rose",
+    "breed": "Kultainennoutaja",
+    "dateOfBirth": "2020-11-05",
+    "registration": "KC789012345",
+    "color": "Kultainen",
+    "weight": 29,
+    "height": 56,
+    "healthTests": ["Lonkkaindeksi: 5/5", "Kyynärindeksi: 0/0", "Sydäntarkastus: Puhdas"],
+    "vaccinationsUpToDate": true,
+    "showResults": [
+      {
+        "show": "Kultainennoutaja erikoisnäyttely 2023",
+        "achievement": "Paras narttu"
+      },
+      {
+        "show": "Kaupungin koiranäyttely 2022",
+        "achievement": "Rotunsa paras"
+      }
+    ],
+    "dnaTests": ["PRA Puhdas", "Ichthyosis Puhdas"],
+    "breeding": {
+      "available": true,
+      "previousLitters": 1
+    },
+    "description": "Bella Rose on upea kultainennoutaja, jolla on rikas kultainen turkki ja erinomainen rakenne. Hänellä on suloinen, lempeä luonne ja hän tulee erinomaisesti toimeen lasten ja muiden eläinten kanssa."
+  }
+}
+

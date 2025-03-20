@@ -1,106 +1,49 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Search, UserPlus, Trash2, Edit, Mail, Phone, MapPin, Users, ChevronRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-
-interface Contact {
-  id: string
-  name: string
-  email: string
-  phone: string
-  address: string
-  category: string
-  notes?: string
-}
+import { translations } from "@/lib/translations"
+import type { Contact } from "@/lib/contact-utils"
+import { useMobile } from "@/hooks/use-mobile"
 
 interface AddressBookContentProps {
   path: string
 }
 
-// Sample contacts data
-const sampleContacts: Contact[] = [
-  {
-    id: "1",
-    name: "John Smith",
-    email: "john.smith@example.com",
-    phone: "(555) 123-4567",
-    address: "123 Main St, Anytown, USA",
-    category: "Staff",
-    notes: "Head trainer, specializes in obedience training",
-  },
-  {
-    id: "2",
-    name: "Sarah Johnson",
-    email: "sarah.j@example.com",
-    phone: "(555) 987-6543",
-    address: "456 Oak Ave, Somewhere, USA",
-    category: "Staff",
-    notes: "Grooming specialist",
-  },
-  {
-    id: "3",
-    name: "Michael Brown",
-    email: "mbrown@example.com",
-    phone: "(555) 456-7890",
-    address: "789 Pine Rd, Elsewhere, USA",
-    category: "Veterinarian",
-    notes: "Available for emergency calls",
-  },
-  {
-    id: "4",
-    name: "Emily Davis",
-    email: "emily.d@example.com",
-    phone: "(555) 234-5678",
-    address: "321 Elm St, Nowhere, USA",
-    category: "Client",
-    notes: "Owner of Max (German Shepherd)",
-  },
-  {
-    id: "5",
-    name: "Robert Wilson",
-    email: "rwilson@example.com",
-    phone: "(555) 876-5432",
-    address: "654 Maple Dr, Anywhere, USA",
-    category: "Client",
-    notes: "Owner of Bella (Border Collie)",
-  },
-  {
-    id: "6",
-    name: "Jennifer Taylor",
-    email: "jtaylor@example.com",
-    phone: "(555) 345-6789",
-    address: "987 Cedar Ln, Someplace, USA",
-    category: "Supplier",
-    notes: "Premium dog food supplier",
-  },
-  {
-    id: "7",
-    name: "David Miller",
-    email: "dmiller@example.com",
-    phone: "(555) 654-3210",
-    address: "159 Birch Blvd, Othertown, USA",
-    category: "Supplier",
-    notes: "Equipment and accessories",
-  },
-  {
-    id: "8",
-    name: "Lisa Anderson",
-    email: "lisa.a@example.com",
-    phone: "(555) 789-0123",
-    address: "753 Spruce St, Anotherplace, USA",
-    category: "Veterinarian",
-    notes: "Specializes in canine orthopedics",
-  },
-]
-
 export function AddressBookContent({ path }: AddressBookContentProps) {
-  const [contacts] = useState<Contact[]>(sampleContacts)
+  const [contacts, setContacts] = useState<Contact[]>([])
   const [selectedContact, setSelectedContact] = useState<Contact | null>(null)
   const [searchTerm, setSearchTerm] = useState("")
   const [currentCategory, setCurrentCategory] = useState("All")
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const isMobile = useMobile()
+
+  // Fetch all contacts
+  useEffect(() => {
+    const fetchContacts = async () => {
+      try {
+        const response = await fetch("/api/contacts")
+
+        if (!response.ok) {
+          throw new Error(`Failed to load contacts: ${response.statusText}`)
+        }
+
+        const data = await response.json()
+        setContacts(data.contacts)
+        setLoading(false)
+      } catch (err) {
+        console.error("Error loading contacts:", err)
+        setError(translations.failedToLoad)
+        setLoading(false)
+      }
+    }
+
+    fetchContacts()
+  }, [])
 
   // Filter contacts based on search term and category
   const filteredContacts = contacts.filter((contact) => {
@@ -114,8 +57,23 @@ export function AddressBookContent({ path }: AddressBookContentProps) {
   // Get unique categories
   const categories = ["All", ...new Set(contacts.map((contact) => contact.category))]
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <div className="text-center">
+          <div className="animate-spin h-8 w-8 border-4 border-blue-500 border-t-transparent rounded-full mx-auto mb-4"></div>
+          <p>{translations.loading}</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return <div className="p-4 text-red-500">{error}</div>
+  }
+
   return (
-    <div className="flex flex-col h-full">
+    <div className={`flex flex-col h-full ${isMobile ? "pb-4" : ""}`}>
       {/* Toolbar - Windows XP style */}
       <div className="bg-[#EFF3F7] border-b border-[#ADB6BF] p-1 flex items-center">
         <Button
@@ -124,7 +82,7 @@ export function AddressBookContent({ path }: AddressBookContentProps) {
           className="flex items-center px-2 py-1 text-xs bg-[#F1F5FB] border border-[#B6BDC7] rounded hover:bg-[#E3E9F2]"
         >
           <UserPlus className="h-3 w-3 mr-1" />
-          New Contact
+          {translations.newContact}
         </Button>
 
         <div className="w-px h-4 bg-[#ADB6BF] mx-2" />
@@ -136,7 +94,7 @@ export function AddressBookContent({ path }: AddressBookContentProps) {
           disabled={!selectedContact}
         >
           <Edit className="h-3 w-3 mr-1" />
-          Properties
+          {translations.properties}
         </Button>
 
         <Button
@@ -146,15 +104,15 @@ export function AddressBookContent({ path }: AddressBookContentProps) {
           disabled={!selectedContact}
         >
           <Trash2 className="h-3 w-3 mr-1" />
-          Delete
+          {translations.delete}
         </Button>
 
         <div className="ml-auto flex items-center">
-          <span className="text-xs mr-1">Find:</span>
+          <span className="text-xs mr-1">{translations.search}:</span>
           <div className="relative">
             <Input
               className="h-6 w-40 text-xs pl-6 bg-white border-[#ADB6BF]"
-              placeholder="Type name or email"
+              placeholder={translations.typeNameOrEmail}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -169,7 +127,7 @@ export function AddressBookContent({ path }: AddressBookContentProps) {
         <div className="w-1/3 border-r border-[#ADB6BF] flex flex-col">
           {/* Categories */}
           <div className="bg-[#EFF3F7] p-2 border-b border-[#ADB6BF]">
-            <h3 className="text-xs font-bold text-[#003399] mb-2">Categories</h3>
+            <h3 className="text-xs font-bold text-[#003399] mb-2">{translations.categories}</h3>
             <ul className="text-xs">
               {categories.map((category) => (
                 <li
@@ -218,13 +176,13 @@ export function AddressBookContent({ path }: AddressBookContentProps) {
                   value="summary"
                   className="text-xs px-3 py-1 rounded-none data-[state=active]:bg-[#F5F5F5] data-[state=active]:border-b-[#F5F5F5] data-[state=active]:border-b-2 data-[state=active]:shadow-none"
                 >
-                  Summary
+                  {translations.summary}
                 </TabsTrigger>
                 <TabsTrigger
                   value="details"
                   className="text-xs px-3 py-1 rounded-none data-[state=active]:bg-[#F5F5F5] data-[state=active]:border-b-[#F5F5F5] data-[state=active]:border-b-2 data-[state=active]:shadow-none"
                 >
-                  Details
+                  {translations.details}
                 </TabsTrigger>
               </TabsList>
 
@@ -235,32 +193,32 @@ export function AddressBookContent({ path }: AddressBookContentProps) {
                   <div className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-sm">
                     <div className="flex items-center text-[#316AC5]">
                       <Mail className="h-4 w-4 mr-1" />
-                      Email:
+                      {translations.email}:
                     </div>
                     <div>{selectedContact.email}</div>
 
                     <div className="flex items-center text-[#316AC5]">
                       <Phone className="h-4 w-4 mr-1" />
-                      Phone:
+                      {translations.phone}:
                     </div>
                     <div>{selectedContact.phone}</div>
 
                     <div className="flex items-center text-[#316AC5]">
                       <MapPin className="h-4 w-4 mr-1" />
-                      Address:
+                      {translations.address}:
                     </div>
                     <div>{selectedContact.address}</div>
 
                     <div className="flex items-center text-[#316AC5]">
                       <Users className="h-4 w-4 mr-1" />
-                      Category:
+                      {translations.category}:
                     </div>
                     <div>{selectedContact.category}</div>
                   </div>
 
                   {selectedContact.notes && (
                     <div className="mt-4 border-t border-[#E5E5E5] pt-2">
-                      <h3 className="text-sm font-bold text-[#003399] mb-1">Notes:</h3>
+                      <h3 className="text-sm font-bold text-[#003399] mb-1">{translations.notes}:</h3>
                       <p className="text-sm">{selectedContact.notes}</p>
                     </div>
                   )}
@@ -269,14 +227,14 @@ export function AddressBookContent({ path }: AddressBookContentProps) {
 
               <TabsContent value="details" className="mt-4 border-none p-0">
                 <div className="bg-white border border-[#ADB6BF] p-4 rounded">
-                  <h3 className="text-sm font-bold text-[#003399] mb-2">Additional Details</h3>
-                  <p className="text-sm text-gray-500">Additional contact details would be shown here.</p>
+                  <h3 className="text-sm font-bold text-[#003399] mb-2">{translations.additionalDetails}</h3>
+                  <p className="text-sm text-gray-500">{translations.additionalDetailsWouldBeShown}</p>
                 </div>
               </TabsContent>
             </Tabs>
           ) : (
             <div className="flex items-center justify-center h-full text-gray-500">
-              <p>Select a contact to view details</p>
+              <p>{translations.selectContactToViewDetails}</p>
             </div>
           )}
         </div>
@@ -284,7 +242,7 @@ export function AddressBookContent({ path }: AddressBookContentProps) {
 
       {/* Status bar */}
       <div className="bg-[#EFF3F7] border-t border-[#ADB6BF] p-1 text-xs text-gray-600">
-        {filteredContacts.length} contact(s)
+        {filteredContacts.length} {translations.contactCount}
       </div>
     </div>
   )

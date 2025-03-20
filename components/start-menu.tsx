@@ -48,7 +48,10 @@ export function StartMenu({ onMenuItemClick, onClose }: StartMenuProps) {
       <div className="flex flex-1">
         {/* Left side - favorites */}
         <div className="w-2/5 bg-white p-2 space-y-1">
-          <button className="w-full text-left p-2 hover:bg-blue-600 hover:text-white rounded flex items-center">
+          <button
+            className="w-full text-left p-2 hover:bg-blue-600 hover:text-white rounded flex items-center"
+            onClick={() => onMenuItemClick("browserApp")}
+          >
             <span className="mr-3 text-lg">🌐</span>
             <div>
               <div className="font-medium text-sm">Internet</div>
@@ -56,11 +59,14 @@ export function StartMenu({ onMenuItemClick, onClose }: StartMenuProps) {
             </div>
           </button>
 
-          <button className="w-full text-left p-2 hover:bg-blue-600 hover:text-white rounded flex items-center">
+          <button
+            className="w-full text-left p-2 hover:bg-blue-600 hover:text-white rounded flex items-center"
+            onClick={() => onMenuItemClick("emailApp")}
+          >
             <span className="mr-3 text-lg">📧</span>
             <div>
               <div className="font-medium text-sm">E-mail</div>
-              <div className="text-xs text-gray-500">Outlook Express</div>
+              <div className="text-xs text-gray-500 group-hover:text-white">Outlook Express</div>
             </div>
           </button>
 
@@ -74,16 +80,18 @@ export function StartMenu({ onMenuItemClick, onClose }: StartMenuProps) {
 
         {/* Right side - main menu items */}
         <div className="w-3/5 bg-blue-50 p-2 space-y-1">
-          {Object.entries(kennelStructure).map(([key, item]) => (
-            <button
-              key={key}
-              className="w-full text-left p-2 hover:bg-blue-600 hover:text-white rounded flex items-center"
-              onClick={() => handleMenuItemClick(key)}
-            >
-              <span className="mr-3 text-lg">{item.icon}</span>
-              <span>{item.title}</span>
-            </button>
-          ))}
+          {Object.entries(kennelStructure)
+            .filter(([key]) => key !== "emailApp" && key !== "browserApp") // Filter out both email and browser
+            .map(([key, item]) => (
+              <button
+                key={key}
+                className="w-full text-left p-2 hover:bg-blue-600 hover:text-white rounded flex items-center"
+                onClick={() => handleMenuItemClick(key)}
+              >
+                <span className="mr-3 text-lg">{item.icon}</span>
+                <span>{item.title}</span>
+              </button>
+            ))}
 
           <div className="border-t border-gray-300 my-2"></div>
 

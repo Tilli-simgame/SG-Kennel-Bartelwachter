@@ -1,0 +1,12 @@
+{
+  "contact": {
+    "id": "7",
+    "name": "David Miller",
+    "email": "dmiller@example.com",
+    "phone": "(555) 654-3210",
+    "address": "159 Birch Blvd, Othertown, USA",
+    "category": "Supplier",
+    "notes": "Equipment and accessories"
+  }
+}
+

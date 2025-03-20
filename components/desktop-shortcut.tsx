@@ -9,7 +9,7 @@ interface DesktopShortcutProps {
 }
 
 export function DesktopShortcut({ title, icon, onClick }: DesktopShortcutProps) {
-  const clickTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const clickTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const processingClickRef = useRef<boolean>(false)
 
   // Cleanup timeout on unmount
